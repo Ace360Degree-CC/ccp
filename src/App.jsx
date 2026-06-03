@@ -8,6 +8,7 @@ import AuditPage from './pages/AuditPage';
 import Queries from './pages/Queries';
 import ProjectDetails from './pages/ProjectDetails';
 import Clients from './pages/Clients';
+import RoleDirectory from './pages/RoleDirectory';
 
 function App() {
   const [role, setRole] = useState('Architect'); // 'Architect' or 'Client'
@@ -22,6 +23,7 @@ function App() {
         <Route path="milestones" element={<MilestonesPage role={role} />} />
         <Route path="queries" element={<Queries role={role} />} />
         <Route path="clients" element={<Clients role={role} />} />
+        <Route path="directory/:roleType" element={<RoleDirectory role={role} />} />
         <Route path="audit" element={<AuditPage role={role} />} />
       </Route>
     </Routes>

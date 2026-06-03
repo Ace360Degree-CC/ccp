@@ -11,6 +11,19 @@ export const mockClients = [
   { id: 4, name: 'Horizon Estates', contact: 'Emma Wilson', email: 'emma@horizonestates.net', phone: '+1 (555) 234-5678', projectsCount: 0 }
 ];
 
+export const mockConsultants = [
+  { id: 1, type: 'STR', company: 'BuildStrong Structural', contact: 'Rajiv Sharma', email: 'rajiv@buildstrong.com', phone: '+1 (555) 111-2222', activeProjects: 2 },
+  { id: 2, type: 'STR', company: 'Prime Engineering', contact: 'Anita Patel', email: 'anita@primeeng.com', phone: '+1 (555) 111-3333', activeProjects: 1 },
+  { id: 3, type: 'MEPF', company: 'Airflow Systems', contact: 'Amit Kumar', email: 'amit@airflow.com', phone: '+1 (555) 222-1111', activeProjects: 3 },
+  { id: 4, type: 'Liaison', company: 'City Permits Inc.', contact: 'Suresh Menon', email: 'suresh@citypermits.com', phone: '+1 (555) 333-1111', activeProjects: 1 },
+  { id: 5, type: 'Landscape', company: 'Green Earth Designs', contact: 'Nina Singh', email: 'nina@greenearth.com', phone: '+1 (555) 444-1111', activeProjects: 2 },
+  { id: 6, type: 'Facade', company: 'Glass & Steel Co.', contact: 'Vikram Joshi', email: 'vikram@glasssteel.com', phone: '+1 (555) 555-1111', activeProjects: 1 },
+  { id: 7, type: 'Render Agency', company: 'Pixel Perfect Studios', contact: 'Neha Gupta', email: 'neha@pixelperfect.com', phone: '+1 (555) 666-1111', activeProjects: 4 },
+  { id: 8, type: 'Contractor', company: 'Solid Foundations Ltd', contact: 'Rahul Desai', email: 'rahul@solidfoundations.com', phone: '+1 (555) 777-1111', activeProjects: 2 },
+  { id: 9, type: 'Vendor', company: 'Material Supplies HQ', contact: 'Karan Shah', email: 'karan@materialsupplies.com', phone: '+1 (555) 888-1111', activeProjects: 5 },
+  { id: 10, type: 'Vendor', company: 'Lumber World', contact: 'Simran Kaur', email: 'simran@lumberworld.com', phone: '+1 (555) 888-2222', activeProjects: 1 },
+];
+
 export const mockProjectMilestones = [
   { id: '1', phase: '1. Concept Design', owner: 'Architect', dueDate: 'Oct 15, 2026', status: 'Completed', progress: 100 },
   { id: '2', phase: '2. Schematic Design', owner: 'Architect', dueDate: 'Nov 10, 2026', status: 'In Progress', progress: 60 },

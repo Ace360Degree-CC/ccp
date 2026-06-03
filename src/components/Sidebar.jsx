@@ -29,6 +29,9 @@ export default function Sidebar({ role }) {
         </NavLink>
         {role === 'Architect' && (
           <>
+            <div style={{ marginTop: '1.5rem', marginBottom: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--color-gray)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Admin Views
+            </div>
             <NavLink to="/clients" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
               <Users size={20} />
               <span>All Clients</span>
@@ -37,6 +40,19 @@ export default function Sidebar({ role }) {
               <History size={20} />
               <span>Audit Logs</span>
             </NavLink>
+
+            <div style={{ marginTop: '1.5rem', marginBottom: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--color-gray)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Partners & Consultants
+            </div>
+            {['STR', 'MEPF', 'Liaison', 'Landscape', 'Facade', 'Render Agency', 'Contractor', 'Vendor'].map(roleName => {
+              const routeParam = roleName.toLowerCase().replace(' ', '-');
+              return (
+                <NavLink key={roleName} to={`/directory/${routeParam}`} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                  <Users size={20} />
+                  <span>{roleName}</span>
+                </NavLink>
+              );
+            })}
           </>
         )}
       </nav>

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { mockConsultants } from '../store/mockData';
+import Modal from '../components/Modal';
 
 export default function RoleDirectory({ role }) {
   const { roleType } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { data: consultants, isLoading } = useQuery({
     queryKey: ['consultants', roleType],
@@ -36,7 +38,7 @@ export default function RoleDirectory({ role }) {
           <h1>{displayTitle} Directory</h1>
           <p className="text-muted">Manage all profiles and contacts for the {displayTitle} role.</p>
         </div>
-        <button className="btn btn-primary">+ Add New Profile</button>
+        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ Add New Profile</button>
       </div>
 
       <div className="card">
@@ -77,6 +79,35 @@ export default function RoleDirectory({ role }) {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Profile">
+        <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Company/Agency Name</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Contact Person</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Email Address</label>
+            <input type="email" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Role</label>
+            <select defaultValue={displayTitle} required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)' }}>
+              {['STR', 'MEPF', 'Liaison', 'Landscape', 'Facade', 'Render Agency', 'Contractor', 'Vendor'].map(r => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Profile</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { mockProjectMilestones } from '../store/mockData';
+import Modal from '../components/Modal';
 
 export default function MilestonesPage({ role }) {
   const [selectedProject, setSelectedProject] = useState('Skyline Tower');
   const [activeTab, setActiveTab] = useState('Phase 1');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Define the 4 major phases for the tabs
   const majorPhases = [
@@ -52,16 +54,23 @@ export default function MilestonesPage({ role }) {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '1.25rem', margin: 0 }}>Project Milestones</h1>
-        <select 
-          value={selectedProject} 
-          onChange={(e) => setSelectedProject(e.target.value)}
-          style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)', minWidth: '200px' }}
-        >
-          <option value="Skyline Tower">Skyline Tower</option>
-          <option value="Riverfront Mall">Riverfront Mall</option>
-          <option value="Tech Park">Tech Park</option>
-        </select>
+        <div>
+          <h1 style={{ fontSize: '1.25rem', margin: 0 }}>Project Milestones</h1>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <select 
+            value={selectedProject} 
+            onChange={(e) => setSelectedProject(e.target.value)}
+            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)', minWidth: '200px' }}
+          >
+            <option value="Skyline Tower">Skyline Tower</option>
+            <option value="Riverfront Mall">Riverfront Mall</option>
+            <option value="Tech Park">Tech Park</option>
+          </select>
+          {role === 'Architect' && (
+            <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ Add Milestone</button>
+          )}
+        </div>
       </div>
 
       {/* Tabs Container */}
@@ -103,7 +112,6 @@ export default function MilestonesPage({ role }) {
               <th style={{ padding: '1rem' }}>Owner</th>
               <th style={{ padding: '1rem' }}>Due Date</th>
               <th style={{ padding: '1rem' }}>Status</th>
-              <th style={{ padding: '1rem' }}>Progress</th>
               <th style={{ padding: '1rem' }}>Action</th>
             </tr>
           </thead>
@@ -116,11 +124,6 @@ export default function MilestonesPage({ role }) {
                 <td style={{ padding: '1rem' }}>
                   {getStatusBadge(m.status)}
                 </td>
-                <td style={{ padding: '1rem', width: '200px' }}>
-                  <div style={{ width: '100%', backgroundColor: 'var(--color-border)', height: '6px', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div style={{ width: `${m.progress}%`, backgroundColor: 'var(--color-dark)', height: '100%' }}></div>
-                  </div>
-                </td>
                 <td style={{ padding: '1rem' }}>
                   <button className="btn btn-outline" style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }}>View Details</button>
                 </td>
@@ -129,6 +132,26 @@ export default function MilestonesPage({ role }) {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add Milestone">
+        <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Milestone Name</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Phase</label>
+            <select required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)' }}>
+              <option value="">-- Select Phase --</option>
+              {majorPhases.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Milestone</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

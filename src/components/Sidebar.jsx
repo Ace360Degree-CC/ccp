@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, Flag, History, MessageSquare, Users } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Flag, History, MessageSquare, Users, ChevronDown, ChevronRight } from 'lucide-react';
 import './Sidebar.css';
 
 export default function Sidebar({ role }) {
+  const [isConsultantsOpen, setIsConsultantsOpen] = useState(false);
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -41,18 +43,27 @@ export default function Sidebar({ role }) {
               <span>Audit Logs</span>
             </NavLink>
 
-            <div style={{ marginTop: '1.5rem', marginBottom: '0.5rem', paddingLeft: '1.5rem', fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--color-gray)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Partners & Consultants
+            <div 
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', marginBottom: '0.5rem', paddingLeft: '1.5rem', paddingRight: '1rem', fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--color-gray)', textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer' }}
+              onClick={() => setIsConsultantsOpen(!isConsultantsOpen)}
+            >
+              <span>Partners & Consultants</span>
+              {isConsultantsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </div>
-            {['STR', 'MEPF', 'Liaison', 'Landscape', 'Facade', 'Render Agency', 'Contractor', 'Vendor'].map(roleName => {
-              const routeParam = roleName.toLowerCase().replace(' ', '-');
-              return (
-                <NavLink key={roleName} to={`/directory/${routeParam}`} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Users size={20} />
-                  <span>{roleName}</span>
-                </NavLink>
-              );
-            })}
+            
+            {isConsultantsOpen && (
+              <div style={{ paddingLeft: '1rem' }}>
+                {['STR', 'MEPF', 'Liaison', 'Landscape', 'Facade', 'Render Agency', 'Contractor', 'Vendor'].map(roleName => {
+                  const routeParam = roleName.toLowerCase().replace(' ', '-');
+                  return (
+                    <NavLink key={roleName} to={`/directory/${routeParam}`} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                      <Users size={20} />
+                      <span>{roleName}</span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            )}
           </>
         )}
       </nav>

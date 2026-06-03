@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { mockClients } from '../store/mockData';
+import Modal from '../components/Modal';
 
 export default function Clients({ role }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: clients, isLoading } = useQuery({
     queryKey: ['clients'],
     queryFn: async () => mockClients,
@@ -24,7 +26,7 @@ export default function Clients({ role }) {
           <h1>All Clients</h1>
           <p className="text-muted">Manage your client relationships and contact information.</p>
         </div>
-        <button className="btn btn-primary">+ Add New Client</button>
+        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ Add New Client</button>
       </div>
 
       <div className="card">
@@ -63,6 +65,35 @@ export default function Clients({ role }) {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Client">
+        <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Company Name</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Primary Contact Name</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Email Address</label>
+            <input type="email" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Phone Number</label>
+            <input type="tel" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Office Address</label>
+            <textarea rows="3" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }}></textarea>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Client</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

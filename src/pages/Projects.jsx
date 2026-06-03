@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { mockProjects } from '../store/mockData';
+import { mockProjects, mockClients, mockConsultants, milestones } from '../store/mockData';
+import Modal from '../components/Modal';
 
 export default function Projects({ role }) {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects', role],
     queryFn: async () => mockProjects,
@@ -13,9 +15,12 @@ export default function Projects({ role }) {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1>Project Directory</h1>
+        <div>
+          <h1>Projects Directory</h1>
+          <p className="text-muted">Manage all active and past projects.</p>
+        </div>
         {role === 'Architect' && (
-          <button className="btn btn-primary">+ New Project</button>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ Add New Project</button>
         )}
       </div>
 
@@ -61,6 +66,40 @@ export default function Projects({ role }) {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Project">
+        <form onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Project Name</label>
+            <input type="text" required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Select Client</label>
+            <select required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)' }}>
+              <option value="">-- Choose Client --</option>
+              {mockClients.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+            </select>
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Select Default Milestones</label>
+            <select multiple style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)', minHeight: '100px' }}>
+              {milestones.map(m => <option key={m.id} value={m.name}>{m.id} - {m.name}</option>)}
+            </select>
+            <small className="text-muted">Hold Ctrl/Cmd to select multiple milestones.</small>
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Assign Consultants</label>
+            <select multiple style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)', minHeight: '100px' }}>
+              {mockConsultants.map(c => <option key={c.id} value={c.company}>{c.type}: {c.company}</option>)}
+            </select>
+            <small className="text-muted">Hold Ctrl/Cmd to assign multiple consultants.</small>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Save Project</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

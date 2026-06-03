@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { mockProjects, mockQueries } from '../store/mockData';
+import ProjectFormModal from '../components/ProjectFormModal';
 
 export default function Dashboard({ role }) {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { data: projects, isLoading: projectsLoading } = useQuery({
     queryKey: ['projects', role],
@@ -26,7 +28,7 @@ export default function Dashboard({ role }) {
           <p className="text-muted">Here's what's happening with your projects today.</p>
         </div>
         {role === 'Architect' && (
-          <button className="btn btn-primary">+ Add New Project</button>
+          <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ Add New Project</button>
         )}
       </div>
 
@@ -101,6 +103,8 @@ export default function Dashboard({ role }) {
           </ul>
         </div>
       </div>
+
+      <ProjectFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

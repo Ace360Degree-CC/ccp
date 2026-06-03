@@ -9,13 +9,20 @@ import Queries from './pages/Queries';
 import ProjectDetails from './pages/ProjectDetails';
 import Clients from './pages/Clients';
 import RoleDirectory from './pages/RoleDirectory';
+import Login from './pages/Login';
 
 function App() {
   const [role, setRole] = useState('Architect'); // 'Architect' or 'Client'
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <Routes>
-      <Route path="/" element={<Layout role={role} setRole={setRole} />}>
+      <Route path="/login" element={<Login setRole={setRole} setIsAuthenticated={setIsAuthenticated} />} />
+      
+      <Route 
+        path="/" 
+        element={isAuthenticated ? <Layout role={role} setRole={setRole} setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/login" replace />}
+      >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard role={role} />} />
         <Route path="projects" element={<Projects role={role} />} />

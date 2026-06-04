@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { mockQueries } from '../store/mockData';
+import { mockQueries, mockProjects } from '../store/mockData';
+import Modal from '../components/Modal';
 
 export default function Queries({ role }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: queries, isLoading } = useQuery({
     queryKey: ['queries', role],
     queryFn: async () => mockQueries,
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsModalOpen(false);
+  };
 
   return (
     <div>
@@ -15,7 +22,7 @@ export default function Queries({ role }) {
           <h1>Queries</h1>
           <p className="text-muted">Manage all project-related questions and clarifications.</p>
         </div>
-        <button className="btn btn-primary">+ New Query</button>
+        <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>+ New Query</button>
       </div>
 
       <div className="card">
@@ -54,6 +61,30 @@ export default function Queries({ role }) {
           </tbody>
         </table>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Query">
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Related Project</label>
+            <select required style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)' }}>
+              <option value="">-- Select Project --</option>
+              {mockProjects.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
+            </select>
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Subject</label>
+            <input type="text" required placeholder="Brief summary of your query" style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }} />
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Description</label>
+            <textarea required rows={4} placeholder="Describe your query or clarification in detail..." style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)', resize: 'vertical' }}></textarea>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Submit Query</button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
